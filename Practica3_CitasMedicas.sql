@@ -10,6 +10,7 @@ direccion_Paciente varchar(50) not null,
 );
 
 select * from Paciente
+
 create table Doctores(
 id_Doctor int primary key,
 nombre_Doctor varchar(50) not null,
@@ -29,7 +30,7 @@ constraint fk_Citas_Doctor foreign key (id_Doctor) references Doctores(id_Doctor
 drop table Citas
 ----Registrar Pacientes
 
-create or alter procedure sp_Registar_Paciente
+create or alter procedure sp_Registrar_Paciente
 	@id_Paciente int,
 	@nombre_Paciente varchar(50),
 	@edad_Paciente int,

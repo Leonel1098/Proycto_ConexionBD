@@ -2,17 +2,22 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from CRUD import CRUD
 from database import BaseDeDatos
+from Paciente import Paciente
+from Doctor import Doctor
+from Cita import Cita
 
 class App:
     def __init__(self, root):
         self.root = root
         self.root.title("Sistema de Gestión de Citas Médicas")
         self.root.geometry("800x600")
-        
+
         # Inicializar Base de Datos y CRUD
         self.db = BaseDeDatos()
         self.crud = CRUD(self.db)
-
+        self.paciente = Paciente(self.crud)
+        self.doctor = Doctor(self.crud)
+        self.cita = Cita(self.crud)
         # Crear la interfaz gráfica
         self.create_widgets()
 
@@ -98,14 +103,14 @@ class App:
         edad = self.entry_edad.get()
         contacto = self.entry_contacto.get()
         direccion = self.entry_direccion.get()
-        self.crud.crear_paciente(nombre, edad, contacto, direccion)
+        self.crud.registrar_Paciente(nombre, edad, contacto, direccion)
         messagebox.showinfo("Éxito", "Paciente registrado exitosamente")
 
     def registrar_doctor(self):
         nombre = self.entry_nombre_doctor.get()
         especialidad = self.entry_especialidad.get()
         contacto = self.entry_contacto_doctor.get()
-        self.crud.crear_doctor(nombre, especialidad, contacto)
+        self.crud.registar_Doctor(nombre, especialidad, contacto)
         messagebox.showinfo("Éxito", "Doctor registrado exitosamente")
 
     def programar_cita(self):
@@ -113,7 +118,7 @@ class App:
         doctor_id = self.entry_doctor_id.get()
         fecha = self.entry_fecha.get()
         hora = self.entry_hora.get()
-        self.crud.programar_cita(paciente_id, doctor_id, fecha, hora)
+        self.crud.registrar_Cita(paciente_id, doctor_id, fecha, hora)
         messagebox.showinfo("Éxito", "Cita programada exitosamente")
 
     def cargar_citas(self):

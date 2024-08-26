@@ -1,71 +1,70 @@
 from database import BaseDeDatos
-
 class CRUD:
 
-    def __init__(self, db) :
+    def __init__(self, db):
         self.db = db
     
     # Paciente CRUD operations
-    def crear_paciente(self, nombre, edad, contacto, direccion):
-        consulta = "EXEC sp_Registrar_Paciente @Nombre=?, @Edad=?, @Contacto=?, @Direccion=?"
+    def registrar_Paciente(self, nombre, edad, contacto, direccion):
+        consulta = "EXEC sp_Registrar_Paciente @nombre_Paciente=?, @edad_Paciente=?, @contacto_Paciente=?, @direccion_Paciente=?"
         self.db.ejecutar_consulta(consulta, (nombre, edad, contacto, direccion))
 
-    def obtener_paciente(self, paciente_id):
+    def obtener_Paciente(self, id_Paciente):
         consulta = "SELECT * FROM Paciente WHERE id = ?"
-        return self.db.obtener_datos(consulta, (paciente_id,))
+        return self.db.obtener_datos(consulta, (id_Paciente,))
 
-    def actualizar_paciente(self, paciente_id, nombre, edad, contacto, direccion):
+    def actualizar_Paciente(self, id_Paciente, nombre, edad, contacto, direccion):
         consulta = '''
-        UPDATE Pacientes SET nombre=?, edad=?, contacto=?, direccion=? WHERE id=?
+        UPDATE Paciente SET nombre_Paciente=?, edad_Paciente=?, contacto_Paciente=?, direccion_Paciente=? WHERE id=?
         '''
-        self.db.ejecutar_consulta(consulta, (nombre, edad, contacto, direccion, paciente_id))
+        self.db.ejecutar_consulta(consulta, (nombre, edad, contacto, direccion, id_Paciente))
 
-    def eliminar_paciente(self, paciente_id):
+    def eliminar_Paciente(self, id_Paciente):
         consulta = "DELETE FROM Paciente WHERE id = ?"
-        self.db.ejecutar_consulta(consulta, (paciente_id,))
+        self.db.ejecutar_consulta(consulta, (id_Paciente,))
 
     # Doctor CRUD operations
-    def crear_doctor(self, nombre, especialidad, contacto):
-        consulta = "EXEC sp_Registrar_Doctor @Nombre=?, @Especialidad=?, @Contacto=?"
+    def registar_Doctor(self, nombre, especialidad, contacto):
+        consulta = "EXEC sp_Registrar_Doctor @nombre_Doctor=?, @especialidad_Doctor=?, @contacto_Doctor=?"
         self.db.ejecutar_consulta(consulta, (nombre, especialidad, contacto))
 
-    def obtener_doctor(self, doctor_id):
+    def obtener_Doctor(self, id_Doctor):
         consulta = "SELECT * FROM Doctores WHERE id = ?"
-        return self.db.obtener_datos(consulta, (doctor_id,))
+        return self.db.obtener_datos(consulta, (id_Doctor,))
 
-    def actualizar_doctor(self, doctor_id, nombre, especialidad, contacto):
+    def actualizar_Doctor(self, id_Doctor, nombre, especialidad, contacto):
         consulta = '''
-        UPDATE Doctores SET nombre=?, especialidad=?, contacto=? WHERE id=?
+        UPDATE Doctores SET nombre_Doctor=?, especialidad_Doctor=?, contacto_Doctor=? WHERE id=?
         '''
-        self.db.ejecutar_consulta(consulta, (nombre, especialidad, contacto, doctor_id))
+        self.db.ejecutar_consulta(consulta, (nombre, especialidad, contacto, id_Doctor))
 
-    def eliminar_doctor(self, doctor_id):
+    def eliminar_Doctor(self, id_Doctor):
         consulta = "DELETE FROM Doctores WHERE id = ?"
-        self.db.ejecutar_consulta(consulta, (doctor_id,))
+        self.db.ejecutar_consulta(consulta, (id_Doctor,))
 
     # Cita CRUD operations
-    def programar_cita(self, paciente_id, doctor_id, fecha, hora):
-        consulta = "EXEC sp_Agendar_Cita @PacienteID=?, @DoctorID=?, @Fecha=?, @Hora=?"
-        self.db.ejecutar_consulta(consulta, (paciente_id, doctor_id, fecha, hora))
+    def registrar_Cita(self, id_Paciente, id_Doctor, fecha, hora):
+        consulta = "EXEC sp_Agendar_Cita @id_Paciente=?, @id_Doctor=?, @fecha=?, @hora=?"
+        self.db.ejecutar_consulta(consulta, (id_Paciente, id_Doctor, fecha, hora))
 
-    def obtener_cita(self, cita_id):
+    def obtener_cita(self, id_cita):
         consulta = "SELECT * FROM Citas WHERE id = ?"
-        return self.db.obtener_datos(consulta, (cita_id,))
+        return self.db.obtener_datos(consulta, (id_cita,))
 
-    def actualizar_cita(self, cita_id, fecha, hora):
+    def actualizar_cita(self, id_cita, fecha, hora):
         consulta = '''
         UPDATE Citas SET fecha=?, hora=? WHERE id=?
         '''
-        self.db.ejecutar_consulta(consulta, (fecha, hora, cita_id))
+        self.db.ejecutar_consulta(consulta, (fecha, hora, id_cita))
 
-    def eliminar_cita(self, cita_id):
+    def eliminar_cita(self, id_cita):
         consulta = "DELETE FROM Citas WHERE id = ?"
-        self.db.ejecutar_consulta(consulta, (cita_id,))
+        self.db.ejecutar_consulta(consulta, (id_cita,))
 
     def visualizar_citas(self):
         consulta = "EXEC sp_Mostar_Citas"
         return self.db.obtener_datos(consulta)
 
-    def historial_paciente(self, paciente_id):
-        consulta = "EXEC sp_Historial_Citas_Pacientes @PacienteID=?"
-        return self.db.obtener_datos(consulta, (paciente_id,))
+    def historial_paciente(self, id_Paciente):
+        consulta = "EXEC sp_Historial_Citas_Pacientes @id_Paciente=?"
+        return self.db.obtener_datos(consulta, (id_Paciente,))

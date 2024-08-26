@@ -1,13 +1,15 @@
 class Paciente:
 
-    def __init__(self, id, nombre, edad, contacto, direccion):
-        self.id = id
-        self.nombre = nombre
-        self.edad = edad
-        self.contacto = contacto
-        self.direccion = direccion
+    def __init__(self, crud):
+        self.crud = crud
+    def registar_paciente(self, nombre,edad,contacto,direccion):
+        self.crud.registrar_Paciente(nombre,edad,contacto,direccion)
 
-    
-    def registrar_Paciente(self, data_base):
-        data_base.ejecutar_procedimiento
+    def historial_pacientes(self, id_Paciente):
+        return self.crud.historial_paciente(id_Paciente)
+
+
+
+
+
 
