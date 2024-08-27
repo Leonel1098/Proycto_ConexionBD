@@ -5,14 +5,14 @@ class Doctor:
     def __init__(self,crud):
         self.crud = crud
 
-    def registar_doctor(self, nombre, especialidad, contacto):
-        self.crud.registar_Doctor(nombre,especialidad,contacto)
+    def registrar_doctor(self, nombre, especialidad, contacto):
+        self.crud.registrar_Doctor(nombre,especialidad,contacto)
     
     def actualizar_doctor(self, id_doctor,nombre,especialidad,contacto):
         self.crud.actualizar_Doctor(id_doctor,nombre, especialidad, contacto)
 
     def eliminar_doctor(self, id_doctor):
-        self.crud.eliminar_Paciente(id_doctor)
+        self.crud.eliminar_Doctor(id_doctor)
 
     def buscar_doctor(self, id_doctor):
         consulta = """
@@ -29,3 +29,4 @@ class Doctor:
         except pyodbc.Error as e:
             messagebox.showerror("Error", str(e))
             return None
+    

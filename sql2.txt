@@ -2,7 +2,7 @@ CREATE DATABASE Gestion_Citas_Medicas;
 use Gestion_Citas_Medicas;
 
 create table Paciente(
-id_Paciente int primary key identity (1,1),
+id_Paciente int identity (1,1) primary key ,
 nombre_Paciente varchar(50) not null,
 edad_Paciente int not null,
 contacto_Paciente int not null,
@@ -14,7 +14,7 @@ drop table Paciente
 
 
 create table Doctores(
-id_Doctor int primary key identity (1,1),
+id_Doctor int identity (1,1) primary key ,
 nombre_Doctor varchar(50) not null,
 especialidad_Doctor varchar(50) not null,
 contacto_Doctor varchar(50) not null);
@@ -47,7 +47,7 @@ as
 begin
 		begin try
 			begin transaction;
-				insert into Paciente (nombre_Paciente,edad_Paciente,contacto_Paciente,direccion_Paciente) values(@nombre_Paciente, @edad_Paciente, @contacto_Paciente, @direccion_Paciente);
+				insert into Paciente values(@nombre_Paciente, @edad_Paciente, @contacto_Paciente, @direccion_Paciente);
 				commit transaction;
 		end try
 		begin catch
@@ -114,7 +114,7 @@ as
 begin
 		begin try
 			begin transaction;
-				insert into Doctores (nombre_Doctor,especialidad_Doctor,contacto_Doctor) values(@nombre_Doctor, @especialidad_Doctor, @contacto_Doctor);
+				insert into Doctores values(@nombre_Doctor, @especialidad_Doctor, @contacto_Doctor);
 				commit transaction;
 		end try
 		begin catch
@@ -204,9 +204,3 @@ begin
 	join Doctores on Citas.id_Doctor = Doctores.id_Doctor
 	where Citas.id_Paciente = @id_Paciente;
 end;
-
-
-
-
-
-

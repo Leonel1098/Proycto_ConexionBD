@@ -31,22 +31,22 @@ class CRUD:
 
     #DOCTOR CRUD Procedimientos que sirven para gestionar datos junto con la base de datos
 
-    def registar_Doctor(self, nombre, especialidad, contacto):
+    def registrar_Doctor(self, nombre, especialidad, contacto):
         consulta = "EXEC sp_Registrar_Doctores @nombre_Doctor=?, @especialidad_Doctor=?, @contacto_Doctor=?"
         self.db.ejecutar_consulta(consulta, (nombre, especialidad, contacto))
 
     def obtener_Doctor(self, id_Doctor):
-        consulta = "SELECT * FROM Doctores WHERE id = ?"
+        consulta = "SELECT * FROM Doctores WHERE id_Doctor = ?"
         return self.db.obtener_datos(consulta, (id_Doctor,))
 
     def actualizar_Doctor(self, id_Doctor, nombre, especialidad, contacto):
         consulta = '''
-        UPDATE Doctores SET nombre_Doctor=?, especialidad_Doctor=?, contacto_Doctor=? WHERE id=?
+        UPDATE Doctores SET nombre_Doctor=?, especialidad_Doctor=?, contacto_Doctor=? WHERE id_Doctor=?
         '''
         self.db.ejecutar_consulta(consulta, (nombre, especialidad, contacto, id_Doctor))
 
     def eliminar_Doctor(self, id_Doctor):
-        consulta = "DELETE FROM Doctores WHERE id = ?"
+        consulta = "DELETE FROM Doctores WHERE id_Doctor = ?"
         self.db.ejecutar_consulta(consulta, (id_Doctor,))
 
     # CITAS CRUD Procedimientos que sirven para gestionar datos junto con la base de datos
@@ -56,17 +56,17 @@ class CRUD:
         self.db.ejecutar_consulta(consulta, (id_Paciente, id_Doctor, fecha, hora))
 
     def obtener_cita(self, id_cita):
-        consulta = "SELECT * FROM Citas WHERE id = ?"
+        consulta = "SELECT * FROM Citas WHERE id_cita = ?"
         return self.db.obtener_datos(consulta, (id_cita,))
 
     def actualizar_cita(self, id_cita, fecha, hora):
         consulta = '''
-        UPDATE Citas SET fecha=?, hora=? WHERE id=?
+        UPDATE Citas SET fecha=?, hora=? WHERE id_cita=?
         '''
         self.db.ejecutar_consulta(consulta, (fecha, hora, id_cita))
 
     def eliminar_cita(self, id_cita):
-        consulta = "DELETE FROM Citas WHERE id = ?"
+        consulta = "DELETE FROM Citas WHERE id_cita = ?"
         self.db.ejecutar_consulta(consulta, (id_cita,))
 
     def visualizar_citas(self):

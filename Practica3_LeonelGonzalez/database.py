@@ -5,7 +5,7 @@ class BaseDeDatos:
         try:
             self.conexion = pyodbc.connect(
                 'DRIVER={ODBC Driver 17 for SQL Server};'
-                'SERVER=LEONEL;'
+                'SERVER=PC-DEV14;'
                 'DATABASE=Gestion_Citas_Medicas;'
                 'UID=Leonel;'
                 'PWD=Leonel'
