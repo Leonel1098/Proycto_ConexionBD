@@ -5,7 +5,7 @@ class BaseDeDatos:
         try:
             self.conexion = pyodbc.connect(
                 'DRIVER={ODBC Driver 17 for SQL Server};'
-                'SERVER=PC-DEV14;'
+                'SERVER=LEONEL;'
                 'DATABASE=Gestion_Citas_Medicas;'
                 'UID=Leonel;'
                 'PWD=Leonel'
@@ -20,7 +20,7 @@ class BaseDeDatos:
                 self.cursor.execute(consulta, parametros)
             else:
                 self.cursor.execute(consulta)
-                self.conexion.commit()
+            self.conexion.commit()
         except pyodbc.Error as e:
             print("Erro al ejecutar el procedimiento",e)
             raise

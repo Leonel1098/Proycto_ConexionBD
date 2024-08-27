@@ -1,31 +1,38 @@
+import pyodbc
+from tkinter import messagebox
 from database import BaseDeDatos
 class CRUD:
 
     def __init__(self, db):
         self.db = db
     
-    # Paciente CRUD operations
+    # Paciente CRUD Procedimientos que sirven para gestionar datos junto con la base de datos
     def registrar_Paciente(self, nombre, edad, contacto, direccion):
         consulta = "EXEC sp_Registrar_Paciente @nombre_Paciente=?, @edad_Paciente=?, @contacto_Paciente=?, @direccion_Paciente=?"
         self.db.ejecutar_consulta(consulta, (nombre, edad, contacto, direccion))
 
     def obtener_Paciente(self, id_Paciente):
-        consulta = "SELECT * FROM Paciente WHERE id = ?"
+        consulta = "SELECT * FROM Paciente WHERE id_Paciente = ?"
         return self.db.obtener_datos(consulta, (id_Paciente,))
 
     def actualizar_Paciente(self, id_Paciente, nombre, edad, contacto, direccion):
-        consulta = '''
-        UPDATE Paciente SET nombre_Paciente=?, edad_Paciente=?, contacto_Paciente=?, direccion_Paciente=? WHERE id=?
-        '''
-        self.db.ejecutar_consulta(consulta, (nombre, edad, contacto, direccion, id_Paciente))
+        consulta ="EXEC sp_Actualizar_Paciente @id_Paciente=?, @nombre_Paciente=?, @edad_Paciente=?, @contacto_Paciente=?, @direccion_Paciente=?"
+        self.db.ejecutar_consulta(consulta, (id_Paciente, nombre, edad, contacto, direccion))
 
     def eliminar_Paciente(self, id_Paciente):
-        consulta = "DELETE FROM Paciente WHERE id = ?"
-        self.db.ejecutar_consulta(consulta, (id_Paciente,))
+        consulta = "EXEC sp_Eliminar_Paciente @id_Paciente=?"
+        try:
+            self.db.ejecutar_consulta(consulta, (id_Paciente,))
+        except pyodbc.Error as e:
+            error_message = str(e)
+            print(f"Error: {error_message}")
+            messagebox.showwarning("Advertencia", error_message)
 
-    # Doctor CRUD operations
+
+    #DOCTOR CRUD Procedimientos que sirven para gestionar datos junto con la base de datos
+
     def registar_Doctor(self, nombre, especialidad, contacto):
-        consulta = "EXEC sp_Registrar_Doctor @nombre_Doctor=?, @especialidad_Doctor=?, @contacto_Doctor=?"
+        consulta = "EXEC sp_Registrar_Doctores @nombre_Doctor=?, @especialidad_Doctor=?, @contacto_Doctor=?"
         self.db.ejecutar_consulta(consulta, (nombre, especialidad, contacto))
 
     def obtener_Doctor(self, id_Doctor):
@@ -42,7 +49,8 @@ class CRUD:
         consulta = "DELETE FROM Doctores WHERE id = ?"
         self.db.ejecutar_consulta(consulta, (id_Doctor,))
 
-    # Cita CRUD operations
+    # CITAS CRUD Procedimientos que sirven para gestionar datos junto con la base de datos
+
     def registrar_Cita(self, id_Paciente, id_Doctor, fecha, hora):
         consulta = "EXEC sp_Agendar_Cita @id_Paciente=?, @id_Doctor=?, @fecha=?, @hora=?"
         self.db.ejecutar_consulta(consulta, (id_Paciente, id_Doctor, fecha, hora))
