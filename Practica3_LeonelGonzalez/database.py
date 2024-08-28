@@ -1,11 +1,13 @@
 import pyodbc
 
+#Es la clase encargada de la conexion de con la base de datos y de ejecutar los procedimientos de la misma
 class BaseDeDatos:
     def __init__(self):
         try:
             self.conexion = pyodbc.connect(
                 'DRIVER={ODBC Driver 17 for SQL Server};'
-                'SERVER=PC-DEV14;'
+                #'SERVER=PC-DEV14;'
+                'SERVER=LEONEL;'
                 'DATABASE=Gestion_Citas_Medicas;'
                 'UID=Leonel;'
                 'PWD=Leonel'
@@ -25,16 +27,18 @@ class BaseDeDatos:
             print("Erro al ejecutar el procedimiento",e)
             raise
 
-    def obtener_datos(self, consulta, parametros = None):
+    def obtener_datos(self, consulta, parametros=None):
         try:
-            if parametros:
-                self.cursor.execute(consulta, parametros)
+            cursor = self.conexion.cursor()
+            if parametros is None:
+                cursor.execute(consulta)
             else:
-                self.cursor.execute(consulta)
-                return self.cursor.fetchall()
-        except pyodbc.Error as e:
-            print(f"Error al obtener datos:",e)
-            raise
+                cursor.execute(consulta, parametros)
+            return cursor.fetchall()
+        except Exception as e:
+            print(f"Error al obtener datos: {e}")
+            return None
+        
     def cerrar_conexion(self):
         self.cursor.close()
         self.conexion.close()

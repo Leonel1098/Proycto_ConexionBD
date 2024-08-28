@@ -1,5 +1,7 @@
 import pyodbc
 from tkinter import messagebox
+
+#En esta clase se crean los metodos que sirven para manejar los procedimientos de la base de datos por medio del CRUD
 class Paciente:
 
     def __init__(self, crud):
@@ -31,7 +33,7 @@ class Paciente:
             return None
 
     def historial_pacientes(self, id_Paciente):
-        return self.crud.historial_paciente(id_Paciente)
+        return self.crud.historial_Paciente(id_Paciente)
 
 
 

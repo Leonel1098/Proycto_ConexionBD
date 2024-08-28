@@ -1,5 +1,7 @@
 import pyodbc
 from tkinter import messagebox
+
+#En esta clase se crean los metodos que sirven para manejar los procedimientos de la base de datos por medio del CRUD
 class Doctor:
 
     def __init__(self,crud):

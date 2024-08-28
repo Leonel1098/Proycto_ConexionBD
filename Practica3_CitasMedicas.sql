@@ -9,19 +9,11 @@ contacto_Paciente int not null,
 direccion_Paciente varchar(50) not null,
 );
 
-select * from Paciente
-drop table Paciente
-
-
 create table Doctores(
 id_Doctor int primary key identity (1,1),
 nombre_Doctor varchar(50) not null,
 especialidad_Doctor varchar(50) not null,
 contacto_Doctor varchar(50) not null);
-
-select * from Doctores
-drop table Doctores
-
 
 
 create table Citas(
@@ -33,9 +25,6 @@ hora time not null,
 constraint fk_Citas_Paciente foreign key (id_Paciente)  references Paciente(id_Paciente),
 constraint fk_Citas_Doctor foreign key (id_Doctor) references Doctores(id_Doctor)
 );
-
-select * from Citas
-drop table Citas
 
 ----Registrar Pacientes
 create or alter procedure sp_Registrar_Paciente
@@ -134,7 +123,7 @@ end;
 create or alter procedure sp_Actualizar_Doctor
 	@id_Doctor int,
 	@nombre_Doctor varchar(50),
-	@especialidad_Doctor int,
+	@especialidad_Doctor varchar(50),
 	@contacto_Doctor varchar(50) 
 	
 as
@@ -187,6 +176,40 @@ begin
 		insert into Citas values (@id_Paciente, @id_Doctor, @fecha,@hora);
 end;
 
+---Actualizar Cita
+create or alter procedure sp_Actualizar_Cita
+	@id_cita int,
+	@id_Paciente int,
+	@id_Doctor int,
+	@fecha date,
+	@hora time
+	
+as
+begin
+	if exists (select 1 from Citas where id_cita = @id_cita)
+	begin
+	update Citas set id_Paciente = @id_Paciente, id_Doctor = @id_Doctor,fecha = @fecha,hora = @hora where id_cita = @id_cita;
+	end
+	else
+	begin
+	raiserror('El Doctor con el ID proporcionado no existe.', 16, 1);
+	end
+end;
+
+----Eliminar Citas
+CREATE OR ALTER PROCEDURE sp_Eliminar_Cita
+    @id_cita INT
+AS
+BEGIN
+    -- Eliminar la cita correspondiente al ID
+    DELETE FROM Citas
+    WHERE id_cita = @id_cita;
+END
+
+
+
+
+-----Muestra todas las citas
 create or alter procedure sp_Mostar_Citas
 as
 begin
@@ -194,6 +217,46 @@ begin
 	join Paciente on Citas.id_Paciente = Paciente.id_Paciente
 	join Doctores on Citas.id_Doctor = Doctores.id_Doctor;
 end;
+
+-----Filtrar las Citas por Paciente
+CREATE OR ALTER PROCEDURE sp_Filtrar_Citas_Paciente
+    @paciente VARCHAR(100)
+AS
+BEGIN
+    SELECT Citas.id_cita, Paciente.nombre_Paciente AS Paciente, Doctores.nombre_Doctor AS Doctor, Citas.fecha, Citas.hora
+    FROM Citas
+    INNER JOIN Paciente ON Citas.id_Paciente = Paciente.id_Paciente
+    INNER JOIN Doctores ON Citas.id_Doctor = Doctores.id_Doctor
+    WHERE Paciente.nombre_Paciente = @paciente;
+END;
+
+----Filtrar las Citas por Doctor
+CREATE OR ALTER PROCEDURE sp_Filtrar_Citas_Doctor
+    @doctor NVARCHAR(100)
+AS
+BEGIN
+    SELECT Citas.id_cita, Paciente.nombre_Paciente AS Paciente, Doctores.nombre_Doctor AS Doctor, Citas.fecha, Citas.hora
+    FROM Citas
+    INNER JOIN Paciente ON Citas.id_Paciente = Paciente.id_Paciente
+    INNER JOIN Doctores ON Citas.id_Doctor = Doctores.id_Doctor
+    WHERE Doctores.nombre_Doctor = @doctor;
+END;
+
+---filtrar las citas por fecha
+CREATE OR ALTER PROCEDURE sp_Filtrar_Citas_Fecha
+    @fecha DATE
+AS
+BEGIN
+    SELECT Citas.id_cita, Paciente.nombre_Paciente AS Paciente, Doctores.nombre_Doctor AS Doctor, Citas.fecha, Citas.hora
+    FROM Citas
+    INNER JOIN Paciente ON Citas.id_Paciente = Paciente.id_Paciente
+    INNER JOIN Doctores ON Citas.id_Doctor = Doctores.id_Doctor
+    WHERE Citas.fecha = @fecha;
+END;
+
+
+
+
 
 ---Mostrar las citas de un Paciente
 create or alter procedure sp_Historial_Citas_Pacientes
@@ -210,3 +273,31 @@ end;
 
 
 
+select * from Paciente
+drop table Paciente
+
+select * from Doctores
+drop table Doctores
+
+select * from Citas
+drop table Citas
+
+
+EXEC sp_Actualizar_Cita 
+    @id_cita = 1, 
+    @id_Paciente = 1, 
+    @id_Doctor = 1, 
+    @fecha = '2024-08-28', 
+    @hora = '10:00:00'
+
+EXEC sp_Mostar_Citas;
+
+EXEC sp_Filtrar_Citas_Paciente @paciente = 'Lionel Messi'
+EXEC sp_Filtrar_Citas @paciente = NULL, @doctor = 'Mario Bros', @fecha = NULL;
+EXEC sp_Filtrar_Citas @paciente = NULL, @doctor = NULL, @fecha = '2024-08-27';
+-- Prueba sin filtros
+EXEC sp_Filtrar_Citas @paciente = NULL, @doctor = NULL, @fecha = NULL;
+
+select * from Citas where id_Paciente = 1002
+
+exec sp_Historial_Citas_Pacientes @id_Paciente = 1002
